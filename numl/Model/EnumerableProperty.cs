@@ -8,6 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Serialization;
+using System.Reflection;
 
 namespace numl.Model
 {
@@ -63,7 +64,7 @@ namespace numl.Model
         public override IEnumerable<double> Convert(object o)
         {
             // is it some sort of enumeration?
-            if (o.GetType().GetInterfaces().Contains(typeof(IEnumerable)))
+            if (o.GetType().GetTypeInfo().ImplementedInterfaces.Contains(typeof(IEnumerable)))
             {
                 var a = (IEnumerable)o;
                 int i = 0;
@@ -79,7 +80,7 @@ namespace numl.Model
                     if (i == 0)
                     {
                         var type = item.GetType();
-                        Discrete = type.BaseType == typeof(Enum) ||
+                        Discrete = type.GetTypeInfo().BaseType == typeof(Enum) ||
                                    type == typeof(bool) ||
                                    type == typeof(string) ||
                                    type == typeof(char);

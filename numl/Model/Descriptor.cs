@@ -271,29 +271,29 @@ namespace numl.Model
         public static Descriptor Create(Type t)
         {
 
-            if (!t.IsClass)
+            if (!t.GetTypeInfo().IsClass)
                 throw new InvalidOperationException("Can only work with class types");
 
             List<Property> features = new List<Property>();
             Property label = null;
 
-            foreach (PropertyInfo property in t.GetProperties())
+            foreach (PropertyInfo property in t.GetRuntimeProperties())
             {
                 var item = property.GetCustomAttributes(typeof(NumlAttribute), false);
 
-                if (item.Length == 1)
+                if (item.Count() == 1)
                 {
-                    var attrib = (NumlAttribute)item[0];
+                    var attrib = (NumlAttribute)item.First();
 
                     // generate appropriate property from attribute
                     Property p = attrib.GenerateProperty(property);
 
                     // feature
-                    if (attrib.GetType().IsSubclassOf(typeof(FeatureAttribute)) ||
+                    if (attrib.GetType().GetTypeInfo().IsSubclassOf(typeof(FeatureAttribute)) ||
                         attrib is FeatureAttribute)
                         features.Add(p);
                     // label
-                    else if (attrib.GetType().IsSubclassOf(typeof(LabelAttribute)) ||
+                    else if (attrib.GetType().GetTypeInfo().IsSubclassOf(typeof(LabelAttribute)) ||
                         attrib is LabelAttribute)
                     {
                         if (label != null)

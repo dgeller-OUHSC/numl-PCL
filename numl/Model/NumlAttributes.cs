@@ -166,7 +166,7 @@ namespace numl.Model
         /// <returns>The property.</returns>
         public override Property GenerateProperty(PropertyInfo property)
         {
-            if (!property.PropertyType.GetInterfaces().Contains(typeof(IEnumerable)))
+            if (!property.PropertyType.GetTypeInfo().ImplementedInterfaces.Contains(typeof(IEnumerable)))
                 throw new InvalidOperationException("Invalid Enumerable type.");
 
             if (_length <= 0)
@@ -175,7 +175,7 @@ namespace numl.Model
             Type type = property.PropertyType;
             var ep = new EnumerableProperty(_length);
             // good assumption??
-            ep.Discrete = type.BaseType == typeof(Enum) ||
+            ep.Discrete = type.GetTypeInfo().BaseType == typeof(Enum) ||
                           type == typeof(bool) ||
                           type == typeof(char);
             ep.Name = property.Name;

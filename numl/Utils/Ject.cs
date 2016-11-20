@@ -56,7 +56,7 @@ namespace numl.Utils
         /// <returns>The new accessor.</returns>
         internal static Func<object, object> CreateAccessor(Type type, string valueName)
         {
-            var prop = type.GetProperty(valueName);
+            var prop = type.GetRuntimeProperty(valueName);
             if (prop != null) // std property
             {
                 var param = Expression.Parameter(typeof(object), "o");
@@ -69,7 +69,7 @@ namespace numl.Utils
             }
             else // dictionary type access
             {
-                var method = type.GetMethod("get_Item", new Type[] { typeof(string) });
+                var method = type.GetRuntimeMethod("get_Item", new Type[] { typeof(string) });
                 if (method == null)
                     throw new InvalidOperationException(string.Format("Could not find a property named \"{0}\" in containing object.", valueName));
 
@@ -116,7 +116,7 @@ namespace numl.Utils
         /// <returns>The new setter.</returns>
         internal static Action<object, object> CreateSetter(Type type, string valueName)
         {
-            var prop = type.GetProperty(valueName);
+            var prop = type.GetRuntimeProperty(valueName);
             if (prop != null) // std property
             {
                 var param = Expression.Parameter(typeof(object), "o");
@@ -132,7 +132,7 @@ namespace numl.Utils
             }
             else // dictionary type access
             {
-                var method = type.GetMethod("set_Item", new Type[] { typeof(string), typeof(object) });
+                var method = type.GetRuntimeMethod("set_Item", new Type[] { typeof(string), typeof(object) });
                 if (method == null)
                     throw new InvalidOperationException(string.Format("Could not find a property named \"{0}\" in containing object.", valueName));
 
@@ -158,7 +158,7 @@ namespace numl.Utils
         public static object Get(object o, string name)
         {
             var type = o.GetType();
-            if (typeof(IDictionary<string, object>).IsAssignableFrom(type))
+            if (typeof(IDictionary<string, object>).GetTypeInfo().IsAssignableFrom(type.GetTypeInfo()))
                 type = typeof(IDictionary<string, object>);
             Func<object, object> accessor = GetAccessor(type, name);
             return accessor.Invoke(o);
@@ -223,7 +223,7 @@ namespace numl.Utils
             return t == typeof(string) ||
                    t == typeof(bool) ||
                    t == typeof(char) ||
-                   t.BaseType == typeof(Enum) ||
+                   t.GetTypeInfo().BaseType == typeof(Enum) ||
                    t == typeof(TimeSpan) ||
                    t == typeof(int) || t == typeof(long) || t == typeof(short) ||
                    t == typeof(double) || t == typeof(float) || t == typeof(decimal) ||
@@ -251,7 +251,7 @@ namespace numl.Utils
                 return (bool)o ? 1d : -1d;
             else if (t == typeof(char)) // ascii number of character
                 return (double)Encoding.UTF8.GetBytes(new char[] { (char)o })[0];
-            else if (t.BaseType == typeof(Enum))
+            else if (t.GetTypeInfo().BaseType == typeof(Enum))
                 return (int)o;
             else if (t == typeof(TimeSpan)) // get total seconds
                 return ((TimeSpan)o).TotalSeconds;
@@ -281,7 +281,7 @@ namespace numl.Utils
                 return (char)((int)val);
             else if (t == typeof(bool))
                 return val >= 0;
-            else if (t.BaseType == typeof(Enum))
+            else if (t.GetTypeInfo().BaseType == typeof(Enum))
                 return Enum.ToObject(t, System.Convert.ChangeType(val, System.Enum.GetUnderlyingType(t), CultureInfo.CurrentCulture));
             else if (t == typeof(TimeSpan)) // get total seconds
                 return new TimeSpan(0, 0, (int)val);
@@ -362,7 +362,7 @@ namespace numl.Utils
                 // find all descendants of given type
                 _descendants[type] = (from p in Platform.AppDomainWrapper.Instance.GetAssemblies()
                                       from t in p.GetTypesSafe()
-                                      where type.IsAssignableFrom(t)
+                                      where type.GetTypeInfo().IsAssignableFrom(t.GetTypeInfo())
                                       select t).ToArray();
             }
 

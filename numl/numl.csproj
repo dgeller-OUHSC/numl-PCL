@@ -10,10 +10,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>numl</RootNamespace>
     <AssemblyName>numl</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <TargetFrameworkProfile>Profile344</TargetFrameworkProfile>
+    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
     <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -69,7 +69,6 @@
     <Compile Include="Math\Functions\SteepLogistic.cs" />
     <Compile Include="Math\Functions\RectifiedLinear.cs" />
     <Compile Include="Math\Kernels\LogisticKernel.cs" />
-    <Compile Include="Optimization\Methods\CoordinateDescent.cs" />
     <Compile Include="Optimization\Functions\CostFunctions\CofiCostFunction.cs" />
     <Compile Include="Optimization\Functions\CostFunctions\CostFunction.cs" />
     <Compile Include="Optimization\Methods\GradientDescent\NAGDescent.cs" />
@@ -178,7 +177,6 @@
     <Compile Include="Supervised\SVM\Selection\WorkingSetSelection3.cs" />
     <Compile Include="Supervised\SVM\SVMGenerator.cs" />
     <Compile Include="Supervised\SVM\SVMModel.cs" />
-    <Compile Include="Unsupervised\CKMeans.cs" />
     <Compile Include="Unsupervised\Cluster.cs" />
     <Compile Include="Unsupervised\GMM.cs" />
     <Compile Include="Unsupervised\HClusterModel.cs" />

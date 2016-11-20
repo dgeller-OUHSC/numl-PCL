@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 using System.Xml.Schema;
 using System.Xml;
+using System.Reflection;
 
 namespace numl.Supervised.NeuralNetwork
 {
@@ -139,7 +140,7 @@ namespace numl.Supervised.NeuralNetwork
         /// <returns>The label.</returns>
         private static string GetLabel(int n, Descriptor d)
         {
-            if (d.Label.Type.IsEnum)
+            if (d.Label.Type.GetTypeInfo().IsEnum)
                 return Enum.GetName(d.Label.Type, n);
             else if (d.Label is StringProperty && ((StringProperty)d.Label).AsEnum)
                 return ((StringProperty)d.Label).Dictionary[n];

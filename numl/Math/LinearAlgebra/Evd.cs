@@ -158,10 +158,8 @@ namespace numl.Math.LinearAlgebra
                     if (p >= 0)
                         sweep(p, q);
 
-                    System.Diagnostics.Debug.WriteLine("({0}, {1}) [{2}] {3}", p, q, Thread.CurrentThread.ManagedThreadId, p < 0 ? "buy" : "");
                 }
 
-                System.Diagnostics.Debug.WriteLine("----------[{0}]----------", Thread.CurrentThread.ManagedThreadId);
                 // move stuff around
                 queue.Enqueue(queue.Dequeue());
             }
